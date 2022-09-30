@@ -34,12 +34,15 @@ class TabularLegendLayout implements LegendLayout {
   final int desiredMaxRows;
   final int desiredMaxColumns;
   final EdgeInsets? cellPadding;
+  final bool isReversed;
 
-  TabularLegendLayout._internal(
-      {required this.isHorizontalFirst,
-      required this.desiredMaxRows,
-      required this.desiredMaxColumns,
-      this.cellPadding});
+  TabularLegendLayout._internal({
+    required this.isHorizontalFirst,
+    required this.desiredMaxRows,
+    required this.desiredMaxColumns,
+    this.cellPadding,
+    required this.isReversed,
+  });
 
   /// Layout horizontally until columns exceed [desiredMaxColumns].
   ///
@@ -51,12 +54,14 @@ class TabularLegendLayout implements LegendLayout {
   factory TabularLegendLayout.horizontalFirst({
     int? desiredMaxColumns,
     EdgeInsets? cellPadding,
+    bool isReversed = false,
   }) {
     return new TabularLegendLayout._internal(
       isHorizontalFirst: true,
       desiredMaxRows: _noLimit,
       desiredMaxColumns: desiredMaxColumns ?? _noLimit,
       cellPadding: cellPadding,
+      isReversed: isReversed,
     );
   }
 
@@ -70,12 +75,14 @@ class TabularLegendLayout implements LegendLayout {
   factory TabularLegendLayout.verticalFirst({
     int? desiredMaxRows,
     EdgeInsets? cellPadding,
+    bool isReversed = false,
   }) {
     return new TabularLegendLayout._internal(
       isHorizontalFirst: false,
       desiredMaxRows: desiredMaxRows ?? _noLimit,
       desiredMaxColumns: _noLimit,
       cellPadding: cellPadding,
+      isReversed: isReversed,
     );
   }
 
@@ -88,8 +95,16 @@ class TabularLegendLayout implements LegendLayout {
             .toList());
 
     return isHorizontalFirst
-        ? _buildHorizontalFirst(paddedLegendEntries)
-        : _buildVerticalFirst(paddedLegendEntries);
+        ? _buildHorizontalFirst(
+            isReversed
+                ? paddedLegendEntries.reversed.toList()
+                : paddedLegendEntries,
+          )
+        : _buildVerticalFirst(
+            isReversed
+                ? paddedLegendEntries.reversed.toList()
+                : paddedLegendEntries,
+          );
   }
 
   @override
