@@ -131,8 +131,7 @@ class SimpleLegendEntryLayout implements LegendEntryLayout {
         : null;
     if (isHidden) {
       // Use a default color for hidden legend entries if none is provided.
-      // color ??= Theme.of(context).textTheme.bodyColor;
-      color ??=   Colors.blue;
+      color ??= Theme.of(context).primaryColor;
       color = color!.withOpacity(0.26);
     }
 
